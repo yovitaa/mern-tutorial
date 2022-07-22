@@ -7,7 +7,7 @@
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js"
   },
-  "author": "",
+  "author": "yovita ananda",
   "license": "MIT",
   "dependencies": {
     "colors": "^1.4.0",
