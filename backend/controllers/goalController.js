@@ -1,11 +1,13 @@
 const asyncHandler = require('express-async-handler')
 const Goal = require('../models/goalModel')
+
 // @desc    Get goals
 // @route   GET /api/goals
 // @acccess Private
 
 const getGoals = asyncHandler (async (req,res) => { 
-    res.status(200).json({message: "Get Goals"})
+    const goals = await Goal.find()
+    res.status(200).json(goals)
 })
 
 // @desc    Set goals
@@ -17,8 +19,11 @@ const setGoals = asyncHandler (async  (req,res) => {
         res.status(400)
         throw new Error('Please add a text field')
     }
+    const goals = await Goal.create({
+        text: req.body.text
+    })
 
-    res.status(200).json({message: 'Set Goals'})
+    res.status(200).json(goal)
 })
 
 // @desc    Update goals
@@ -26,7 +31,15 @@ const setGoals = asyncHandler (async  (req,res) => {
 // @acccess Private
 
 const updateGoals = asyncHandler (async (req,res) => {
-    res.status(200).json({message: 'Update Goal ${req.params.id}'})
+    const goals = await Goal.findById(req.params.id)
+    if(!goals) {
+        res.status(400)
+        throw new Error('Goal not found')
+    }
+    
+    const updatedGoals = await Goal.findByIdAndUpdate(req.params.id, req.body, { new: true})
+    
+    res.status(200).json(updatedGoals)
 })
 
 // @desc    Delete goals
