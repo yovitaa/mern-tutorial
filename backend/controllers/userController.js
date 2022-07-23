@@ -54,7 +54,7 @@ const loginUser = asyncHandler(async(req,res) => {
     //check for user email
     const user = await User.findOne({email})
 
-    if(user && (await bcryot.compare(password, user.password))){
+    if(user && (await bcrypt.compare(password, user.password))){
         res.json({
             __id: user.id,
             name: user.name,
@@ -71,9 +71,14 @@ const loginUser = asyncHandler(async(req,res) => {
 // @route   GET /api/users/me
 // @access  Public
 const getMe = asyncHandler(async(req,res) => {
-    res.json({ message: "User data display"})
-})
+    const { _id, name, email } = await User.findById(req.user.id);
 
+    res.status(200).json({
+        id: _id,
+        name,
+        email,
+    });
+});
 
 // generate JWT
 const generateToken = (id) => {
